@@ -1,0 +1,58 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Lib\Repository\Base\BaseRequest;
+
+class {{ class }} extends BaseRequest
+{
+    /**
+     * save{{ table }}Data验证规则
+     * @return string[]
+     * User: Se1per
+     */
+    public function getRulesBysave{{ table }}Data()
+    {
+        return {{storeRules}};
+    }
+
+    /**
+     * update{{ table }}Data验证规则
+     * @return string[]
+     * User: Se1per
+     */
+    public function getRulesByupdate{{ table }}Data()
+    {
+        return {{updateRules}};
+    }
+
+    /**
+     * del{{ table }}Data验证规则
+     * @return string[]
+     * User: Se1per
+     */
+    public function getRulesBydel{{ table }}Data()
+    {
+        return {{deleteRules}};
+    }
+
+    /**
+     * get{{ table }}Data验证规则
+     * @return string[]
+     * User: Se1per
+     */
+    public function getRulesByget{{ table }}Data()
+    {
+        return {{getRules}};
+    }
+
+    /**
+     * messages验证规则返回提示语
+     * @return string[]
+     * User: Se1per
+     */
+     public function messages()
+     {
+        return {{messagesRules}};
+     }
+}

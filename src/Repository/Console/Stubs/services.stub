@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Lib\Repository\Base\BaseServices;
+
+class {{ class }} extends BaseServices
+{
+
+}

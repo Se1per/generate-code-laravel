@@ -1,0 +1,16 @@
+{
+    "name": "japool/genconsole",
+    "description": "generate code",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "ext-pdo_mysql": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Japool\\Genconsole\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}

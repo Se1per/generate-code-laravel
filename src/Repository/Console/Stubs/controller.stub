@@ -1,0 +1,81 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Lib\Repository\Base\BaseController;
+use App\Http\Request\{{ table }}Request;
+use Illuminate\Http\JsonResponse;
+
+class {{ class }} extends BaseController
+{
+
+    public function save{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        $data = Request()->only([{{savefields}}]);
+
+        try {
+            //业务逻辑
+            //[$status,$data] = $this->Services->service($data);
+            //if (!$status) return $this->Services->JsonMain(503004, $msg);
+
+            // 数据操作
+            [$status,$msg]  = $this->Repository->saveData($data);
+
+        } catch (\Exception $e) {
+            //调试
+            return $this->Services->JsonMain(200002, $e->getMessage());
+        }
+
+        if (!$status) return $this->Services->JsonMain(503004, $msg);
+
+        return $this->Services->JsonMain(200000, '数据保存成功');
+    }
+
+    public function update{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        $data = Request()->only([{{updatefields}}]);
+
+        try {
+            //业务逻辑
+            //[$status,$data] = $this->Services->service($data);
+            //if (!$status) return $this->Services->JsonMain(503004, $msg);
+
+            // 数据操作
+            [$status,$msg]  = $this->Repository->updateData($data,$data['id']);
+
+        } catch (\Exception $e) {
+            //调试
+            return $this->Services->JsonMain(200002, $e->getMessage());
+        }
+
+        if (!$status) return $this->Services->JsonMain(503004, $msg);
+
+        return $this->Services->JsonMain(200000, '数据更新成功');
+
+    }
+
+    public function del{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        return $this->deleteData();
+    }
+
+    public function get{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        $data = Request()->only([{{getfields}}]);
+
+        $getSql = $this->Services->selectArray($data);
+
+        try {
+
+            $count = $this->Repository->getCount($getSql);
+
+            $list = $this->Repository->getData($getSql);
+
+        } catch (\Exception $e) {
+            return $this->Services->JsonMain(200002, $e->getMessage());
+        }
+
+        return $this->Services->JsonMain(200000, '数据查询成功', $list, $count);
+
+    }
+}

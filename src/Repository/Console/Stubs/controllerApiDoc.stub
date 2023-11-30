@@ -1,0 +1,123 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Lib\Repository\Base\BaseController;
+use App\Http\Request\{{ table }}Request;
+use Illuminate\Http\JsonResponse;
+use hg\apidoc\annotation as Apidoc;
+use App\Lib\Repository\Base\BaseDefinitions;
+
+/**
+ * {{ApiDocTitle}}
+ * @Apidoc\Group("{{ table }}")
+ */
+class {{ class }} extends BaseController
+{
+    /**
+     * @Apidoc\Title("保存{{ApiDocTitle}}")
+     * @Apidoc\Desc("保存{{ApiDocTitle}}")
+     * @Apidoc\Author("HG")
+     * @Apidoc\Tag("{{ table }},{{ApiDocTitle}}")
+     * @Apidoc\Url ("{{url}}/{{smallTableName}}/save{{ table }}Data")
+     * @Apidoc\Method ("POST")
+{{apiQuery}}
+     */
+    public function save{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        $data = Request()->only([{{savefields}}]);
+
+        try {
+            //业务逻辑
+            //[$status,$data] = $this->Server->service($data);
+            //if (!$status) return $this->Server->JsonMain(503004, $msg);
+
+            // 数据操作
+            [$status,$msg]  = $this->Repository->saveData($data);
+
+        } catch (\Exception $e) {
+            //调试
+            return $this->Server->JsonMain(200002, $e->getMessage());
+        }
+
+        if (!$status) return $this->Server->JsonMain(503004, $msg);
+
+        return $this->Server->JsonMain(200000, '数据保存成功');
+    }
+
+    /**
+     * @Apidoc\Title("修改{{ApiDocTitle}}")
+     * @Apidoc\Desc("修改{{ApiDocTitle}}")
+     * @Apidoc\Author("HG")
+     * @Apidoc\Tag("{{ table }},{{ApiDocTitle}}")
+     * @Apidoc\Url ("{{url}}/{{smallTableName}}/update{{ table }}Data")
+     * @Apidoc\Method ("PUT")
+{{apiQueryUpdate}}
+     */
+    public function update{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        $data = Request()->only([{{updatefields}}]);
+
+        try {
+            //业务逻辑
+            //[$status,$data] = $this->Server->service($data);
+            //if (!$status) return $this->Server->JsonMain(503004, $msg);
+
+            // 数据操作
+            [$status,$msg]  = $this->Repository->updateData(['id', $data['id']], $data);
+
+        } catch (\Exception $e) {
+            //调试
+            return $this->Server->JsonMain(200002, $e->getMessage());
+        }
+
+        if (!$status) return $this->Server->JsonMain(503004, $msg);
+
+        return $this->Server->JsonMain(200000, '数据更新成功');
+
+    }
+
+    /**
+     * @Apidoc\Title("删除{{ApiDocTitle}}")
+     * @Apidoc\Desc("删除{{ApiDocTitle}}")
+     * @Apidoc\Author("HG")
+     * @Apidoc\Tag("{{ table }},{{ApiDocTitle}}")
+     * @Apidoc\Url ("{{url}}/{{smallTableName}}/del{{ table }}Data")
+     * @Apidoc\Method ("PUT")
+{{apiQueryDel}}
+     */
+    public function del{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        return $this->deleteData();
+    }
+
+    /**
+     * @Apidoc\Title("获取{{ApiDocTitle}}")
+     * @Apidoc\Desc("获取{{ApiDocTitle}}")
+     * @Apidoc\Author("HG")
+     * @Apidoc\Tag("{{ table }},{{ApiDocTitle}}")
+     * @Apidoc\Url ("{{url}}/{{smallTableName}}/get{{ table }}Data")
+     * @Apidoc\Method ("GET")
+{{apiQueryGet}}
+     * @Apidoc\Returned(ref={BaseDefinitions::class,"pagingParam"})
+     */
+    public function get{{ table }}Data({{ table }}Request $request): JsonResponse
+    {
+        $data = Request()->only([{{getfields}}]);
+
+        $getSql = $this->Server->selectArray($data);
+
+        try {
+
+            $count = $this->Repository->getCount($getSql);
+
+            $list = $this->Repository->getData($getSql);
+
+        } catch (\Exception $e) {
+            return $this->Server->JsonMain(200002, $e->getMessage());
+        }
+
+        return $this->Server->JsonMain(200000, '数据查询成功', $list, $count);
+
+    }
+}

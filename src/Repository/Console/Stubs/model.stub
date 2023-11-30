@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Lib\Repository\Base\BaseModel;
+use Illuminate\Notifications\Notifiable;
+
+class {{ class }} extends BaseModel
+{
+    use HasFactory, Notifiable;
+
+    protected $table ='{{table}}';
+
+    protected $primaryKey = 'id';
+
+    protected $fillable = [{{fields}}];
+
+}
